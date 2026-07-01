@@ -1,0 +1,125 @@
+Metadata-Version: 2.4
+Name: prospector-mcp
+Version: 0.1.0
+Summary: MCP server exposing Prospector static analysis via its native Python API
+Author-email: OpenCode Agent <opencode@garambrogne.net>
+License: MIT
+Keywords: mcp,prospector,static-analysis,linter
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Software Development :: Quality Assurance
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: fastmcp>=0.4.0
+Requires-Dist: prospector>=1.13.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.0; extra == "dev"
+
+# Prospector MCP Server
+
+An [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) server that exposes [Prospector](https://github.com/prospector-dev/prospector) — the Python static analysis tool — through its **native Python API**.
+
+## Features
+
+- Run Prospector on a single file or an entire directory.
+- Return structured, machine-readable results (messages with severity, location, rule code).
+- Layered TOML configuration with sensible defaults.
+- Supports both `stdio` and `SSE` transports via [FastMCP](https://github.com/jlowin/fastmcp).
+- Secure by default: respects `.gitignore`, ignores `.env` / `.venv`, validates paths, enforces timeouts.
+
+## Installation
+
+### Via `uvx` (recommended)
+
+```bash
+uvx run prospector-mcp
+```
+
+### Via `pip`
+
+```bash
+pip install prospector-mcp
+prospector-mcp
+```
+
+### Development setup
+
+```bash
+git clone https://github.com/yourname/prospector-mcp.git
+cd prospector-mcp
+pip install -e ".[dev]"
+pytest
+```
+
+## Usage
+
+### Claude Desktop / OpenCode
+
+Add the server to your MCP settings:
+
+```json
+{
+  "mcpServers": {
+    "prospector": {
+      "command": "uvx",
+      "args": ["run", "prospector-mcp"]
+    }
+  }
+}
+```
+
+### SSE transport
+
+```bash
+prospector-mcp --transport sse
+# or
+prospector-mcp --sse
+```
+
+## Configuration
+
+Configuration is layered (later layers override earlier ones):
+
+1. **Built-in defaults**
+2. **Global config**: `~/.config/prospector-mcp/config.toml`
+3. **Project config**: `.prospector-mcp.toml` in the project root
+
+### Example `.prospector-mcp.toml`
+
+```toml
+[prospector]
+timeout = 60
+strictness = "medium"
+profile = "default"
+ignore = [".tox", "build", "dist"]
+
+[server]
+transport = "stdio"
+```
+
+## Tools
+
+### `prospector.run`
+
+Run Prospector on a target path.
+
+**Parameters:**
+- `target` (string, required): Path to a Python file or directory.
+- `profile` (string, optional): Override the Prospector profile.
+- `strictness` (string, optional): Override strictness (`verylow` to `veryhigh`).
+
+**Returns:** Structured dict with `summary`, `messages`, and `execution_time`.
+
+### `prospector.check_ready`
+
+Check if Prospector is installed and available.
+
+## License
+
+MIT
