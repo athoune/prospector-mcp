@@ -28,6 +28,7 @@ async def prospector_run(
 
     Returns:
         Structured dict with summary, messages, and execution metadata.
+
     """
     raw_target = Path(target)
     project_root = find_project_root(raw_target if raw_target.is_dir() else raw_target.parent)

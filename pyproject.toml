@@ -56,3 +56,6 @@ warn_unused_ignores = true
 [tool.vulture]
 ignore_decorators = ["@mcp\\.tool"]
 
+
+[tool.pydocstyle]
+ignore = ["D213", "D406", "D407"]

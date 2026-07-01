@@ -31,6 +31,7 @@ def validate_target(target: str, workspace: Path) -> Path:
 
     Returns:
         The resolved absolute Path.
+
     """
     workspace = workspace.resolve()
     raw = Path(target)

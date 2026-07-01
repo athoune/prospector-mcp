@@ -5,18 +5,35 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from prospector import tools as prospector_tools
 from prospector.config import ProspectorConfig
 from prospector.exceptions import FatalProspectorException
 from prospector.run import Prospector
 
 
-def _patch_argv(target: Path, profile: str | None, strictness: str | None) -> list[str]:
+def _patch_argv(
+    target: Path,
+    profile: str | None,
+    strictness: str | None,
+    tools: str | list[str] | None,
+) -> list[str]:
     """Build a fake sys.argv for setoptconf so ProspectorConfig picks up our parameters."""
     argv = ["prospector", str(target)]
-    if profile:
+    # Only pass --profile if it is explicitly overridden (non-default).
+    # This keeps Prospector's auto-detection of .prospector.yaml intact.
+    if profile and profile != "default":
         argv += ["--profile", profile]
     if strictness:
         argv += ["--strictness", strictness]
+
+    # Activate tools explicitly. "all" means every tool that is installed.
+    if tools == "all":
+        for tool_name in prospector_tools.TOOLS:
+            argv += ["-t", tool_name]
+    elif isinstance(tools, list):
+        for tool_name in tools:
+            argv += ["-t", tool_name]
+
     return argv
 
 
@@ -25,10 +42,11 @@ def _run_sync(target: Path, config: dict) -> dict[str, Any]:
     project_root = config.get("_project_root", target if target.is_dir() else target.parent)
     profile = config["prospector"].get("profile")
     strictness = config["prospector"].get("strictness")
+    tools = config["prospector"].get("tools")
 
     old_argv = sys.argv[:]
     try:
-        sys.argv = _patch_argv(target, profile, strictness)
+        sys.argv = _patch_argv(target, profile, strictness, tools)
         pconfig = ProspectorConfig(workdir=project_root)
     finally:
         sys.argv = old_argv

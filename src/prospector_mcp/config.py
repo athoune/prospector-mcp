@@ -10,6 +10,7 @@ DEFAULTS = {
         "timeout": 60,
         "strictness": "medium",
         "profile": "default",
+        "tools": "all",
         "ignore": [".git", "__pycache__", ".venv", "venv", ".env", "env"],
         "respect_gitignore": True,
     },

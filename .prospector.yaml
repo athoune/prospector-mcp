@@ -11,3 +11,10 @@ pyroma:
   run: true
 pyright:
   run: true
+
+pydocstyle:
+  run: true
+  disable:
+    - D213
+    - D406
+    - D407
