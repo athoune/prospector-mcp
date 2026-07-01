@@ -1,0 +1,5 @@
+src/prospector_mcp.egg-info
+.pytest_cache
+.ropeproject
+.ruff_cache
+.venv
