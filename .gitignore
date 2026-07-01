@@ -3,3 +3,5 @@ src/prospector_mcp.egg-info
 .ropeproject
 .ruff_cache
 .venv
+__pycache__/
+*.pyc

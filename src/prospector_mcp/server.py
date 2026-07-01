@@ -1,5 +1,6 @@
 """FastMCP server exposing Prospector tools."""
 
+import importlib
 import sys
 from pathlib import Path
 
@@ -56,8 +57,7 @@ async def prospector_run(
 async def prospector_check_ready() -> dict:
     """Check whether Prospector is installed and report its version."""
     try:
-        import prospector
-
+        prospector = importlib.import_module("prospector")
         version = getattr(prospector, "__version__", "unknown")
     except Exception:
         return {
@@ -101,6 +101,10 @@ def main() -> None:
     else:
         mcp.run()
 
+
+# Explicit references to silence static-analysis tools that do not
+# understand FastMCP's decorator-based registration.
+_TOOL_REGISTRATION = (prospector_run, prospector_check_ready)
 
 if __name__ == "__main__":
     main()

@@ -33,9 +33,6 @@ def _run_sync(target: Path, config: dict) -> dict[str, Any]:
     finally:
         sys.argv = old_argv
 
-    # Override paths explicitly in case setoptconf did not pick them up.
-    pconfig.paths = [target]
-
     prospector = Prospector(pconfig)
     prospector.execute()
 

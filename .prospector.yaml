@@ -1,0 +1,13 @@
+---
+autodetect: false
+
+bandit:
+  run: true
+ruff:
+  run: true
+vulture:
+  run: true
+pyroma:
+  run: true
+pyright:
+  run: true
