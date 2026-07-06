@@ -8,15 +8,15 @@ version = "0.3.0"
 description = "MCP server exposing Prospector static analysis via its native Python API"
 readme = "README.md"
 requires-python = ">=3.11"
-license = {text = "MIT"}
+license = "GPL-3.0-or-later"
 authors = [
-    {name = "OpenCode Agent", email = "opencode@garambrogne.net"}
+    {name = "OpenCode Agent", email = "opencode@garambrogne.net"},
+    {name = "Mathieu Lecarme", email = "mathieu@garambrogne.net"}
 ]
 keywords = ["mcp", "prospector", "static-analysis", "linter"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
