@@ -5,3 +5,4 @@ src/prospector_mcp.egg-info
 .venv
 __pycache__/
 *.pyc
+session-ses_*.md
